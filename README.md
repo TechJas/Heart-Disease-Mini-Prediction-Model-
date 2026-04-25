@@ -1,4 +1,4 @@
-🫀 Heart Disease Prediction Model
+# 🫀 Heart Disease Prediction Model
 👩‍💻 Author: Jasmin Banu M
 
 A predictive machine learning model built using Python, Scikit-learn, and Random Forest Classifier to detect heart disease based on patient medical data.
