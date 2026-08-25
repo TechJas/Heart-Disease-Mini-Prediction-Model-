@@ -1,146 +1,112 @@
-# 🫀 Heart Disease Prediction Model
-👩‍💻 Author: Jasmin Banu M
+# Heart Disease Prediction Model
 
-A predictive machine learning model built using Python, Scikit-learn, and Random Forest Classifier to detect heart disease based on patient medical data.
-Works seamlessly on both Google Colab and VS Code environments.
+**Author:** Jasmin Banu M
 
-🚀 Features
+A machine learning model that predicts heart disease from clinical patient data using Random Forest, deployed as an interactive Streamlit web app.
 
-🧠 Machine Learning Powered — Uses a Random Forest Classifier for accurate heart disease prediction.
+---
 
-📂 Smart Dataset Handling — Supports both CSV and JSON uploads and auto-saves data for reuse.
+## The Problem
 
-⚙️ Cross-Platform Compatibility — Runs smoothly on Google Colab or local Python environments.
+Heart disease is the leading cause of death globally. Early detection saves lives, but manual diagnosis requires specialists and time. This project builds an ML model that predicts heart disease from 8 clinical features — enabling faster screening.
 
-🔐 Data Persistence — Saves preprocessed datasets and trained models using joblib.
+## What This Project Does
 
-📊 Interactive Prediction Interface — Prompts user input for real-time predictions.
+- **Analyzes** a medical dataset of 1,319 patients with 8 clinical features
+- **Handles outliers** using IQR method with domain-aware decisions (retains clinically meaningful values)
+- **Tunes** a Random Forest classifier using GridSearchCV with 5-fold stratified cross-validation
+- **Achieves 98.47% F1 score** on held-out test data
+- **Deploys** as a Streamlit web app for real-time prediction
 
-💾 Automatic Scaling — Normalizes feature values using StandardScaler.
+## Results
 
-🧩 Project Workflow
+| Metric | Score |
+|--------|-------|
+| CV F1 Score | 99.07% |
+| Test F1 Score | 98.47% |
+| Precision | 98% |
+| Recall | 98% |
+| Total Misclassifications | 5 out of 264 |
 
-Upload or Load Dataset
+### Feature Importance
 
-Upload a CSV/JSON medical dataset.
+| Feature | Importance |
+|---------|-----------|
+| Troponin | ~57% |
+| CK-MB | ~26% |
+| Age | ~5% |
+| Others | ~12% |
 
-The program will save it as medical_dataset_saved.pkl for future use.
+Troponin and CK-MB are cardiac biomarkers that naturally elevate during heart muscle damage — the model learned clinically meaningful patterns, not data artifacts.
 
-Data Preprocessing
+## Tech Stack
 
-Cleans column names.
+| Component | Technology |
+|-----------|-----------|
+| Language | Python |
+| Model | Random Forest (tuned) |
+| Preprocessing | StandardScaler, LabelEncoder |
+| Evaluation | GridSearchCV, StratifiedKFold |
+| Deployment | Streamlit |
+| ML Library | Scikit-learn |
 
-Encodes the result column (positive = 1, negative = 0).
+## Project Structure
 
-Scales numerical features for model stability.
+```
+Heart-Disease-Mini-Prediction-Model-/
+├── app.py                    # Streamlit web app
+├── heart_model.pkl           # Trained Random Forest model
+├── scaler.pkl                # StandardScaler
+├── requirements.txt          # Dependencies
+├── heart_cleaned.csv         # Cleaned dataset
+├── heart_dataset_expo.ipynb  # Full analysis notebook
+├── Medicaldataset.csv        # Original dataset
+└── README.md
+```
 
-Model Training
+## Installation
 
-Splits data (80% training, 20% testing).
-
-Trains using RandomForestClassifier.
-
-Displays training accuracy.
-
-Prediction Phase
-
-Takes new patient details (age, gender, blood pressure, etc.).
-
-Predicts disease status and confidence level.
-
-🧰 Tech Stack
-Component	Technology Used
-Language	Python
-Libraries	Pandas, NumPy, Scikit-learn, Joblib
-Model	RandomForestClassifier
-Environment	Google Colab / VS Code
-📦 Installation
-# Clone the repository
-git clone https://github.com/<your-username>/heart-disease-prediction-model.git
-
-# Navigate into project folder
-cd heart-disease-prediction-model
-
-# Install dependencies
+```bash
+git clone https://github.com/TechJas/Heart-Disease-Mini-Prediction-Model-.git
+cd Heart-Disease-Mini-Prediction-Model-
 pip install -r requirements.txt
+```
 
-🧾 Usage
-▶️ Run the model
-python heart_disease_predictor.py
+## Running the App
 
+```bash
+streamlit run app.py
+```
 
-You’ll be prompted to:
+Opens at http://localhost:8501 — enter patient details in the sidebar and click Predict.
 
-Upload a dataset (CSV/JSON)
+## Live Demo
 
-Train the model automatically
+Deployed on Streamlit Cloud: [https://heart-disease-mini-prediction-model.streamlit.app](https://heart-disease-mini-prediction-model.streamlit.app)
 
-Enter patient data for prediction
+## Features Used
 
-🧮 Example Features (Expected Columns)
-Feature	Description
-age	Patient’s age (in years)
-gender	1 = Male, 0 = Female
-heart_rate	Beats per minute
-systolic_blood_pressure	Systolic BP (mmHg)
-diastolic_blood_pressure	Diastolic BP (mmHg)
-blood_sugar	Blood sugar level (mg/dL)
-ck-mb	CK-MB enzyme level (ng/mL)
-troponin	Troponin enzyme level (ng/mL)
-result	Target label: 1 = Disease, 0 = No Disease
-🧠 Output Example
-✅ Model trained successfully! Accuracy: 94.50%
+| Feature | Description |
+|---------|------------|
+| age | Patient age (years) |
+| gender | 1 = Male, 0 = Female |
+| heart_rate | Heart rate (bpm) |
+| systolic_blood_pressure | Systolic BP (mmHg) |
+| diastolic_blood_pressure | Diastolic BP (mmHg) |
+| blood_sugar | Blood sugar (mg/dL) |
+| ck_mb | CK-MB enzyme level (ng/mL) |
+| troponin | Troponin enzyme level (ng/mL) |
 
-🩺 Enter new patient details for prediction:
-Age (years): 45
-Gender (1=Male, 0=Female): 1
-Heart rate (bpm): 90
-Systolic blood pressure (mmHg): 140
-Diastolic blood pressure (mmHg): 90
-Blood sugar (mg/dL): 180
-CK-MB (ng/mL): 25
-Troponin (ng/mL): 0.05
+## Key Decisions Made During Development
 
-🔍 Prediction Result: 🩸 Positive (Heart Disease Detected)
-📊 Confidence: 88.23%
+- **Outliers retained:** Extreme values in troponin, CK-MB, and blood pressure were kept because they represent clinically meaningful observations (e.g., elevated troponin indicates cardiac damage)
+- **No data leakage:** Verified that biomarker separation between classes is legitimate clinical signal, not target leakage
+- **Scaling kept:** StandardScaler included for KNN comparison fairness, even though Random Forest doesn't require it
 
-📘 requirements.txt
+## License
 
-Create a requirements.txt file containing:
+MIT License
 
-pandas
-numpy
-scikit-learn
-joblib
-tk
+## Disclaimer
 
-
-💡 Note: tk is optional — used only for file dialog boxes in VS Code.
-
-🧑‍🔬 Future Enhancements
-
-✅ Integrate with a web interface (Flask/Streamlit) for user-friendly access.
-
-🧠 Add explainable AI (XAI) visualizations using SHAP or LIME.
-
-💻 Deploy as a cloud API for hospital integration.
-
-📱 Create a mobile app version using React Native or Flutter.
-
-🪪 License
-
-This project is licensed under the MIT License — feel free to modify, use, and distribute with credit.
-
-💬 Author Note
-
-“This model is not meant to replace medical diagnosis but to assist in early detection through data-driven insights. Always consult healthcare professionals for medical decisions.”
-
-— Jasmine Banu M
-
-🧷 Tags
-
-#AIForHealth #HeartDiseasePrediction #MachineLearning #DataScience #HealthcareAI
-
-Would you like me to generate all the files (README.md + requirements.txt) as downloadable .zip so you can upload directly to GitHub?
-
-Voice chat ended
+This model is not meant to replace medical diagnosis. It assists in early detection through data-driven insights. Always consult healthcare professionals for medical decisions.
